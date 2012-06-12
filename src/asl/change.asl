@@ -134,9 +134,21 @@
 
      
 { begin maintenance_goal("+pos(_,_,_)") }
+
 +!go_random
-:random_pos(X,Y)
-<- 	.print("going to: ", pos(X,Y)); 
+: //jia.getclusters(N,CL,SIZES) &
+//N > 0 &
+cluster_dir_pos(X,Y)
+//corral_dir_pos(X,Y)
+<- 	
+    .print("cercando o cluster: ", pos(X,Y), N, CL, SIZES); 
+    
+   	+target(X,Y).
+
++!go_random
+:corral_dir_pos(X,Y)
+<- 	
+    .print("going to: ", pos(X,Y)); 
     
    	+target(X,Y).
    

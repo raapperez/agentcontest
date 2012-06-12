@@ -47,7 +47,7 @@ public class getclusters extends DefaultInternalAction {
 		ListTerm Cl = new ListTermImpl();
 		for (int i = 0;i<n;i++) {
 			Location l = Center[i].getLocation(model);
-		//	logger.info("HHHasl we have "+n+" clusters, and the "+i+"th is at ("+l.x+","+l.y+")");
+			logger.info("HHHasl we have "+n+" clusters, and the "+i+"th is at ("+l.x+","+l.y+")");
 			Cl.add(ASSyntax.createStructure("pos", ASSyntax.createNumber(l.x),ASSyntax.createNumber(l.y)));	
 		}
 		ListTerm Sizes = new ListTermImpl();
@@ -56,7 +56,7 @@ public class getclusters extends DefaultInternalAction {
 		}
 
 		return un.unifies(args[0], ASSyntax.createNumber(n))
-			&  un.unifies(args[1], Cl)
+			&  un.unifies(args[1], Cl != null && !(Cl.size() > 0)? Cl.get(0) : Cl )
 			&  un.unifies(args[2], Sizes);			
 	}
 	

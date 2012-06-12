@@ -18,10 +18,13 @@ import jason.asSyntax.NumberTermImpl;
 import jason.asSyntax.ObjectTerm;
 import jason.asSyntax.Term;
 import jason.environment.grid.Location;
+import jason.stdlib.foreach;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+
+import sun.font.EAttribute;
 
 import arch.CowboyArch;
 import arch.LocalWorldModel;
