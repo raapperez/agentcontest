@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml-stylesheet href="http://moise.sourceforge.net/xml/os.xsl" type="text/xsl" ?>
+
+<organisational-specification 
+
+    id="equipe-alpha"
+    os-version="0.1"
+  
+    xmlns='http://moise.sourceforge.net/os'
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation='http://moise.sourceforge.net/os
+                        http://moise.sourceforge.net/xml/os.xsd' >
+    
+    <structural-specification>
+        <role-definitions>
+	    <role id="vaqueiro" />
+	    <role id="vaqueiroDeBusca">  <extends role="vaqueiro"/> </role>
+	    <role id="vaqueiroDeCerca">  <extends role="vaqueiro"/> </role>
+        </role-definitions>
+
+        <group-specification id="team">
+            <links>
+                <link from="vaqueiro" to="vaqueiro" type="communication"
+                      scope="inter-group" extends-sub-groups="true" bi-dir="false"/>
+            </links>
+            <sub-groups>	
+                <group-specification id="grupoDeConducao" min="7" max="10" >
+                    <roles>
+		    			<role id="vaqueiroDeBusca" min="1" max="10"/>
+		    			<role id="vaqueiroDeCerca" min="0" max="0"/>
+                    </roles>
+                </group-specification>
+
+                <group-specification id="grupoDeCerca" min="0" max="3" >
+                    <roles>
+		    			<role id="vaqueiroDeBusca" min="0" max="0"/>
+		    			<role id="vaqueiroDeCerca" min="0" max="3"/>
+                    </roles>
+                </group-specification> 
+            </sub-groups>
+            <formation-constraints>
+
+            </formation-constraints>
+        </group-specification>
+    </structural-specification>
+
+
+
+    <functional-specification>
+        <scheme id="vencerCompeticao" >
+
+			<goal id="buscaEConducao" min="1">
+				<plan operator="sequence">
+					<goal id="procurarVacas" ds="procura por vacas" type="maintenance"/>
+					<goal id="conduzirVacas" ds="conduzir vacas até curral" type="maintenance">
+					</goal> 
+				</plan>
+			</goal>
+			
+			<mission id="m1" min="1">
+                <goal id="procurarVacas" />
+            </mission>
+            <mission id="m2" min="1" max="1">
+                <goal id="conduzirVacas" />
+            </mission>
+
+		</scheme>     
+
+    </functional-specification>
+
+    <normative-specification>
+          <norm id="n1"  type="obligation" role="vaqueiroDeBusca" mission="m1" />
+          <norm id="n2"  type="obligation" role="vaqueiroDeBusca"  mission="m2" />
+         </normative-specification>
+</organisational-specification>
+
