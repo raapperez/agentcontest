@@ -7,12 +7,13 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import env.ClusterModelFactory;
+import env.IClusterModel;
+
 import busca.Nodo;
 
 import arch.CowboyArch;
 import arch.LocalWorldModel;
-import env.ClusterModelFactory;
-import env.IClusterModel;
 import jason.environment.grid.Location;
 import jason.asSemantics.*;
 import jason.asSyntax.*;
@@ -36,6 +37,7 @@ public class preferable_cluster extends DefaultInternalAction {
 	int size;
 	IClusterModel ClModel;
 	int n = 20;
+
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
     	arch = (CowboyArch)ts.getUserAgArch();
@@ -46,19 +48,27 @@ public class preferable_cluster extends DefaultInternalAction {
 		ListTerm pos = new ListTermImpl();
 		ListTerm sizs = new ListTermImpl();
     	
-    	
-    	
     	if(args.length == 5){
     		contCluster[] ClChosed = getClusterWith(null,Gr);
+    		/*
 			for(int i = 0;i<ClChosed.length;i++){
 				//logger.info("vvvv java 5 posicao "+i+": ("+positions[i].x+","+positions[i].y+")");
     			Location loc = ClChosed[i].v.getLocation(model);
 				pos.add(ASSyntax.createStructure("pos", ASSyntax.createNumber(loc.x),ASSyntax.createNumber(loc.y)));
 				sizs.add(ASSyntax.createNumber(ClChosed[i].d));
 			}
+			*/
+			// TODO: retornar o cluster mais proximo do curral
+			if (ClChosed.length > 0) {
+				contCluster cCl = nearCorralCluster(ClChosed);
+				Location loc = cCl.v.getLocation(model);
+				pos.add(ASSyntax.createStructure("pos", ASSyntax.createNumber(loc.x),ASSyntax.createNumber(loc.y)));
+				sizs.add(ASSyntax.createNumber(cCl.d));
+			}
     		return un.unifies(args[2], pos) &
     				un.unifies(args[3], sizs) &
-    				un.unifies(args[4], new NumberTermImpl(ClChosed.length));
+    				//un.unifies(args[4], new NumberTermImpl(ClChosed.length));
+    				un.unifies(args[4], new NumberTermImpl(1));
     	}else if(args.length == 7){
     		if(args[2].isGround() && args[3].isGround()){
     			Location Cl = new Location((int)((NumberTerm)args[2]).solve(),(int)((NumberTerm)args[3]).solve());
@@ -89,6 +99,21 @@ public class preferable_cluster extends DefaultInternalAction {
     	logger.warning("preferable_cluster not Called properly: number of Terms is wrong");
     	return null;
     }
+
+    private contCluster nearCorralCluster(contCluster[] ClChosed) {
+    	contCluster cCl= ClChosed[0];
+    	Location loc = cCl.v.getLocation(model);
+    	int dist = loc.distance(model.getCorral().center());
+    	for (int i = 1; i < ClChosed.length; i++) {
+    		loc = ClChosed[i].v.getLocation(model);
+    		int newDist = loc.distance(model.getCorral().center());
+    		if (newDist < dist) {
+    			cCl = ClChosed[i];
+    		}
+    	}
+    	return cCl;
+    }
+
     private int getDistances(Location Cl, Location Gr) throws Exception{
     	s = new Search(model,Cl, model.getCorral().center(),null, false, false, false, false, false, false,arch);
     	
@@ -101,7 +126,7 @@ public class preferable_cluster extends DefaultInternalAction {
     	int GrToCl = path.size();
     	return ClToCo + GrToCl;
     }
-   
+
     private contCluster[] getClusterWith(Location befCl,Location Gr)throws Exception{
     	Vec[] Centers = ClModel.getCenters();
     	int[] NumberOfCows = ClModel.getNumCows();
@@ -130,16 +155,10 @@ public class preferable_cluster extends DefaultInternalAction {
     		}
     		Location Cl = Centers[i].getLocation(model);
 			int actdist = getDistances(Cl,Gr);
-
-
     		cC[i] = new contCluster(Centers[i],actdist,NumberOfCows[i],Radius[i],clotemp);
     	}
     	
     	Arrays.sort(cC);
-	int counter = 0;
-	for(contCluster cc: cC){
-		System.out.println("CLUSTER "+(counter++)+": ("+cc.n+" - "+cc.d+" - "+cc.r+")");
-	}
     	return cC;
     }
 
@@ -161,8 +180,8 @@ public class preferable_cluster extends DefaultInternalAction {
 			
 			if(this.clo) return -1;
 			if(c.clo) return  1;
-			if(c.n<n) return  1;
-			if(c.n>n) return  -1;
+			if(this.n>n && c.n<n) return -1;
+			if(c.n>n && this.n<n) return  1;
 			if(this.d<c.d)return -1;
 			if(this.d>c.d)return  1;
 			if(this.r<c.r)return -1;

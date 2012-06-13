@@ -138,7 +138,9 @@
 +!go_random
 : //jia.getclusters(N,CL,SIZES) &
 //N > 0 &
-cluster_dir_pos(X,Y)
+  .my_name(Me) &
+   agent_id(Me,My_Id) &
+cluster_dir_pos(My_Id,X,Y)
 //corral_dir_pos(X,Y)
 <- 	
     .print("cercando o cluster: ", pos(X,Y), N, CL, SIZES); 
@@ -146,7 +148,7 @@ cluster_dir_pos(X,Y)
    	+target(X,Y).
 
 +!go_random
-:corral_dir_pos(X,Y)
+:randomm_pos(X,Y)
 <- 	
     .print("going to: ", pos(X,Y)); 
     

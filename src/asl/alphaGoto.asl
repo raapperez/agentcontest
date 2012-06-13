@@ -14,6 +14,43 @@ random_pos(X,Y) :-
     not jia.obstacle(X,Y) &
     not jia.fence(X,Y) &
     not jia.corral(X,Y).
+    
+corral_dir_pos(X,Y) :-
+	pos(AgX,AgY,_) &
+    corral_center(RX, RY) &
+    X = RX &
+    Y = RY &
+    not jia.obstacle(X,Y) &
+    not jia.fence(X,Y).
+    
+cluster_dir_pos(ID,X,Y) :-
+	pos(AgX,AgY,_) &
+	//jia.cluster(CL, CLaux) &
+	jia.getclusters(N,CL,S) &
+	N > 0 &
+	jia.preferable_cluster(AgX,AgY,L,S,N) &
+	
+	.list(L) &
+	.length(L, A) & A > 0 &
+	.print("L: ", L) &
+	L = [pos(ClX,ClY)] &
+	//.count(play(_,captor,G),NAg) &
+	jia.position_to_cluster(ClX,ClY,10, Formation) &
+	//Formation = [pos(RX,RY)|TLoc_] &
+	.print((ID mod 10)) &
+	.print("formaçao: ",Formation) &
+	.nth((ID mod 10),Formation,FPos) &
+	.print("fpos: ",FPos) &
+	set_xy(FPos,X,Y) &
+	.print("X: ", X, " Y: ", Y) &
+//    X = RX &
+//    Y = RY &
+    not jia.obstacle(X,Y) &
+    not jia.fence(X,Y).
+    
+set_xy(pos(RX,RY),X,Y) :- 
+.print("RX: ", RX, " RY: ", RY) &
+X = RX & Y = RY.
 
 
 

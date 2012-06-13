@@ -202,10 +202,26 @@
      
 { begin maintenance_goal("+pos(_,_,_)") }
 
-+!procurarVacas
-<-
+//se tiver um cluster de vacas a vista, cria um cluster ao redor dele.
++!procurarVacas 
+: .my_name(Me) &
+   agent_id(Me,My_Id) &
+	cluster_dir_pos(My_Id,X,Y)
+<- 	
+    .print("cercando o cluster: ", pos(X,Y), N, CL, SIZES); 
 	.print("procurarVacas");
-.
+    
+   	+target(X,Y).
+   	
+//caso não tenham vacas a vista, agentes devem se mover aleatóriamentes.
++!procurarVacas 
+: random_pos(X,Y)
+//corral_dir_pos(X,Y)
+<- 	
+    .print("direção aleatória: ", pos(X,Y)); 
+	.print("procurarVacas");
+    
+   	+target(X,Y).
 
 +!conduzirVacas
 <-
