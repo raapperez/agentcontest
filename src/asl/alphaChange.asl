@@ -211,7 +211,9 @@
     .print("cercando o cluster: ", pos(X,Y), N, CL, SIZES); 
 	.print("procurarVacas");
     
-   	+target(X,Y).
+   	+target(X,Y);
+   	
+   	!procurarVacas.
    	
 //caso não tenham vacas a vista, agentes devem se mover aleatóriamentes.
 +!procurarVacas 
@@ -221,14 +223,24 @@
     .print("direcao aleatoria: ", pos(X,Y)); 
 	.print("procurarVacas");
     
-   	+target(X,Y).
+   	+target(X,Y);
+   	
+   	!procurarVacas.
    	//-procurarVacas;
     //!herding_cows.
 
 +!procurarVacas
+: at_target
+<- .print("indo para o curral");
+   +target(X,Y);
+   !conduzirVacas.
+   
++!procurarVacas
 <- .print("not going");
    +target(X,Y);
-   .
+   !procurarVacas.
+
+   
    	
 +!herding_cows
 	: pos(X,Y,ActionId) & target(TX,TY)
@@ -257,8 +269,9 @@
 
 +!conduzirVacas
 <-
-	.print("conduzirVacas")
-.
+	.print("conduzirVacas");
+	!conduzirVacas.
+
 
 
 +!go_random

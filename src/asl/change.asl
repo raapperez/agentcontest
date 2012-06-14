@@ -136,31 +136,64 @@
 { begin maintenance_goal("+pos(_,_,_)") }
 
 +!go_random
-: //jia.getclusters(N,CL,SIZES) &
-//N > 0 &
-  .my_name(Me) &
+: .my_name(Me) &
    agent_id(Me,My_Id) &
-   
-cluster_dir_pos(My_Id,X,Y)
-//corral_dir_pos(X,Y)
+   not going_to_curral &
+   cluster_dir_pos(My_Id,X,Y)
 <- 	
     .print("cercando o cluster: ", pos(X,Y), N, CL, SIZES); 
+	.print("procurarVacas");
     
-   	+target(X,Y).
+   	+target(X,Y);
+   	-going_to_curral;
+   	.
 
++!go_random 
+: 	pos(AgX,AgY,_) &
+	jia.corral(AgX,AgY) &
+	.my_name(Me) &
+   	agent_id(Me,My_Id) &
+	cluster_dir_pos(My_Id,X,Y)
+<- .print("going back to cluster"); 
+   +target(X,Y);
+   -going_to_curral.
+   
++!go_random 
+: at_target &
+	pos(AgX,AgY,_) &
+	not jia.corral(AgX,AgY)
+<- .print("Go Curral"); 
+   !go_curral;
+   +target(X,Y).   
+   
 +!go_random
-:randomm_pos(X,Y)
+:random_pos(X,Y)
 <- 	
     .print("going to: ", pos(X,Y)); 
     
-   	+target(X,Y).
+   	+target(X,Y);
+   	-going_to_curral.
+
    
    
-+!go_random
-<- .print("not going"); 
-   +target(X,Y).
+
+   
+ +!go_random
+ :random_pos(X,Y) &
+  pos(AgX,AgY,_) &
+  jia.corral(AgX,AgY)
+ <- .print("not going"); 
+   +target(X,Y);
+   -going_to_curral.
 
 { end }	 
++!go_curral
+:corral_dir_pos(X,Y)
+<-
+.print("going to curral"); 
++going_to_curral;
+   +target(X,Y);
+.
 
      
 

@@ -25,6 +25,7 @@ corral_dir_pos(X,Y) :-
     
 cluster_dir_pos(ID,X,Y) :-
 	pos(AgX,AgY,_) &
+	not at_target &
 	//jia.cluster(CL, CLaux) &
 	jia.getclusters(N,CL,S) &
 	N > 0 &
@@ -77,7 +78,7 @@ X = RX & Y = RY.
 
 +!move 
    : target(X,Y) & jia.obstacle(X,Y)  // the target is an obstacle! 
-  <- .print("[goto.asl] My target ", X, ",", Y, " is an obstacle, ignoring target!");
+  <- .print("[goto.asl] My target ", X, ",", Y, " is an obstacle, c!");
      -+at_target;
      do(skip);
      !move.

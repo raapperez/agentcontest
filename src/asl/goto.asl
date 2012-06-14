@@ -15,16 +15,6 @@ random_pos(X,Y) :-
     not jia.fence(X,Y) &
     not jia.corral(X,Y).
     
-above_pos(X,Y) :-
-	pos(AgX,AgY,_) &
-    jia.random(RX,20) &
-    jia.random(RY,20) &
-    X = 1 &
-    Y = 1 &
-    not jia.obstacle(X,Y) &
-    not jia.fence(X,Y) &
-    not jia.corral(X,Y).
-    
 corral_dir_pos(X,Y) :-
 	pos(AgX,AgY,_) &
     corral_center(RX, RY) &
@@ -32,18 +22,24 @@ corral_dir_pos(X,Y) :-
     Y = RY &
     not jia.obstacle(X,Y) &
     not jia.fence(X,Y).
-
+    
 cluster_dir_pos(ID,X,Y) :-
 	pos(AgX,AgY,_) &
+	
 	//jia.cluster(CL, CLaux) &
 	jia.getclusters(N,CL,S) &
 	N > 0 &
 	jia.preferable_cluster(AgX,AgY,L,S,N) &
 	
-	.list(L) &
-	.length(L, A) & A > 0 &
-	.print("L: ", L) &
-	L = [pos(ClX,ClY)] &
+//	.list(L) &
+//	.length(L, A) & A > 0 &
+//	.print("L: ", L) &
+//	L = [pos(ClX,ClY)] &
+	.list(CL) &
+	.length(CL, A) & A > 0 &
+	.print("CL: ", L) &
+	CL = [pos(ClX,ClY)] &
+	
 	//.count(play(_,captor,G),NAg) &
 	jia.position_to_cluster(ClX,ClY,10, Formation) &
 	//Formation = [pos(RX,RY)|TLoc_] &
