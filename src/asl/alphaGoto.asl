@@ -30,10 +30,15 @@ cluster_dir_pos(ID,X,Y) :-
 	N > 0 &
 	jia.preferable_cluster(AgX,AgY,L,S,N) &
 	
-	.list(L) &
-	.length(L, A) & A > 0 &
-	.print("L: ", L) &
-	L = [pos(ClX,ClY)] &
+//	.list(L) &
+//	.length(L, A) & A > 0 &
+//	.print("L: ", L) &
+//	L = [pos(ClX,ClY)] &
+	.list(CL) &
+	.length(CL, A) & A > 0 &
+	.print("CL: ", L) &
+	CL = [pos(ClX,ClY)] &
+	
 	//.count(play(_,captor,G),NAg) &
 	jia.position_to_cluster(ClX,ClY,10, Formation) &
 	//Formation = [pos(RX,RY)|TLoc_] &

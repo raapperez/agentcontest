@@ -140,6 +140,7 @@
 //N > 0 &
   .my_name(Me) &
    agent_id(Me,My_Id) &
+   
 cluster_dir_pos(My_Id,X,Y)
 //corral_dir_pos(X,Y)
 <- 	

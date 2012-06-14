@@ -218,10 +218,42 @@
 : random_pos(X,Y)
 //corral_dir_pos(X,Y)
 <- 	
-    .print("direção aleatória: ", pos(X,Y)); 
+    .print("direcao aleatoria: ", pos(X,Y)); 
 	.print("procurarVacas");
     
    	+target(X,Y).
+   	//-procurarVacas;
+    //!herding_cows.
+
++!procurarVacas
+<- .print("not going");
+   +target(X,Y);
+   .
+   	
++!herding_cows
+	: pos(X,Y,ActionId) & target(TX,TY)
+	<-  //.print("[herding_cows1]");
+		.drop_desire(move);
+		!move.
+
++!herding_cows : pos(X,Y,ActionId) & target(X,Y).
+	//<- 	//.print("[herding_cows2]");
+		//.drop_desire(move);
+		//!move.
+
+/*
++!herding_cows : target(TX,TY)
+	<-	//.print("[herding_cows3]");
+		.drop_desire(move);
+		!move.
+*/
+
++!herding_cows : pos(X,Y,ActionId) &
+	jia.near_least_visited(X,Y,ToX,ToY)
+	<- 	//.print("[herding_cows4]");
+		!pos(ToX,ToY).
+
++!herding_cows <- .print("[herding_cows] do nothing").
 
 +!conduzirVacas
 <-
